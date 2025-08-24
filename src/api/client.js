@@ -1,4 +1,4 @@
-const BASE = "http://localhost:4000";
+const BASE = "http://localhost:3001";
 
 export async function fetchHostawayReviews() {
   const r = await fetch(`${BASE}/api/reviews/hostaway`);

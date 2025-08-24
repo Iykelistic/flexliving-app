@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ArrowLeft, Star, MapPin, Wifi, Car, Coffee, Users, Calendar } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Users, Calendar } from 'lucide-react';
 
 const PropertyDetails = ({ propertyName, onBack }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchApprovedReviews = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:3001/api/reviews/approved/${encodeURIComponent(propertyName)}`
+        );
+        setReviews(response.data.reviews);
+      } catch (error) {
+        console.error('Error fetching approved reviews:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
     fetchApprovedReviews();
-  }, [propertyName]);
-
-  const fetchApprovedReviews = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://localhost:3001/api/reviews/approved/${encodeURIComponent(propertyName)}`
-      );
-      setReviews(response.data.reviews);
-    } catch (error) {
-      console.error('Error fetching approved reviews:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [propertyName]); 
+  
 
   const renderStars = (rating) => {
     return Array(5).fill(0).map((_, i) => (
